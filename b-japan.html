@@ -284,7 +284,7 @@
     (async () => {
         if (isPC()) {
             try {
-                const s = await getDoc(doc(db, "promo_settings", "pcAccess"));
+                const s = await getDoc(doc(db, "promo_settings_japan", "pcAccess"));
                 if (s.exists() && s.data().enabled === false) {
                     document.getElementById("pcBlockScreen").style.display = "flex";
                     return;
@@ -294,7 +294,7 @@
         document.getElementById("viewerScreen").style.display = "block";
         for (let i = 1; i <= 4; i++) {
             try {
-                const d = await getDoc(doc(db, "promo_videos", "session" + i));
+                const d = await getDoc(doc(db, "promo_videos_japan", "session" + i));
                 if (d.exists() && d.data().link) {
                     document.getElementById("btn_session" + i).disabled = false;
                     document.getElementById("dot_session" + i).classList.add("on");
@@ -306,7 +306,7 @@
     window.playVideo = async function(id) {
         if (isPC()) {
             try {
-                const s = await getDoc(doc(db, "promo_settings", "pcAccess"));
+                const s = await getDoc(doc(db, "promo_settings_japan", "pcAccess"));
                 if (s.exists() && s.data().enabled === false) {
                     alert("컴퓨터에서의 재생이 제한되어 있습니다.\n📱 모바일에서 이용해주세요.");
                     return;
@@ -315,7 +315,7 @@
         }
         loading(true);
         try {
-            const d = await getDoc(doc(db, "promo_videos", id));
+            const d = await getDoc(doc(db, "promo_videos_japan", id));
             if (d.exists() && d.data().link) {
                 window.open(d.data().link.replace("/preview","/view"), "_blank");
             } else {
