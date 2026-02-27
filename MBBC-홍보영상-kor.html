@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBBC WORLD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            background: #1e293b;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ───── 로그인 화면 ───── */
+        .login-screen {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 30px;
+        }
+
+        .login-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            margin-bottom: 80px;
+            letter-spacing: 4px;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-label {
+            color: #cbd5e1;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 18px;
+            font-size: 22px;
+            border: 2px solid rgba(148, 163, 184, 0.3);
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.8);
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .login-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .login-input::placeholder {
+            color: rgba(148, 163, 184, 0.5);
+            font-size: 20px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3);
+        }
+
+        .login-error {
+            display: none;
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* ───── 관리자 화면 ───── */
+        .admin-screen {
+            display: none;
+            background: #1e293b;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .admin-title {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .mode-badge {
+            display: inline-block;
+            background: #ef4444;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: rgba(148, 163, 184, 0.3);
+            color: #e5e7eb;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(148, 163, 184, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .control-section {
+            background: #334155;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .control-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .control-item:last-child {
+            border-bottom: none;
+        }
+
+        .control-label {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #475569;
+            transition: 0.3s;
+            border-radius: 30px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider { background-color: #10b981; }
+        input:checked + .toggle-slider:before { transform: translateX(30px); }
+
+        .status-message {
+            margin-top: 10px;
+            padding: 12px;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            color: #6ee7b7;
+            font-size: 14px;
+        }
+
+        .video-upload-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        /* ───── 동영상 업로드 화면 ───── */
+        .video-upload-screen {
+            display: none;
+            background: #1e293b;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .back-btn {
+            background: #475569;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .upload-header {
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .upload-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .video-item {
+            background: #334155;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .video-name {
+            color: #facc15;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .video-input {
+            width: 100%;
+            padding: 12px;
+            background: #1e293b;
+            border: 2px solid #475569;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .video-input::placeholder {
+            color: rgba(148, 163, 184, 0.5);
+        }
+
+        .video-btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .save-video-btn {
+            flex: 1;
+            padding: 10px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .delete-video-btn {
+            flex: 1;
+            padding: 10px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        /* ───── B 뷰어 화면 ───── */
+        .viewer-screen {
+            display: none;
+            background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 회사 정보 박스 */
+        .company-info-box {
+            background: linear-gradient(135deg, #2d3f55 0%, #1e2d42 100%);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 16px;
+            padding: 22px 20px;
+            margin-bottom: 28px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .company-title {
+            font-size: 30px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 4px;
+            margin-bottom: 14px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .company-info-line {
+            color: #cbd5e1;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 2;
+        }
+
+        .company-info-line .highlight {
+            color: #fde68a;
+        }
+
+        .company-info-line .kakao-icon {
+            display: inline-block;
+            background: #fee500;
+            color: #3c1e1e;
+            font-size: 11px;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 4px;
+        }
+
+        .company-info-line .wechat-icon {
+            display: inline-block;
+            background: #09b83e;
+            color: white;
+            font-size: 11px;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 4px;
+        }
+
+        /* 영상 버튼 리스트 */
+        .session-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .session-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 22px 20px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.12);
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .session-btn.black {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0d0d1a 100%);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+
+        .session-btn.black:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #252540 0%, #1a1a2e 100%);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.6);
+        }
+
+        .session-btn.blue {
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f2a45 100%);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .session-btn.blue:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #274a75 0%, #1a3a5a 100%);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.5);
+        }
+
+        .session-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .session-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #475569;
+            flex-shrink: 0;
+        }
+
+        .session-dot.active {
+            background: radial-gradient(circle at 30% 30%, #ff4444, #cc0000);
+            box-shadow: 0 0 20px rgba(255,68,68,0.9), 0 0 40px rgba(255,17,17,0.5);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255,68,68,0.9), 0 0 40px rgba(255,17,17,0.5); }
+            50% { box-shadow: 0 0 30px rgba(255,68,68,1), 0 0 60px rgba(255,17,17,0.7); }
+        }
+
+        /* Thank you */
+        .thank-you {
+            text-align: center;
+            color: #facc15;
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            padding: 10px 0 20px;
+            text-shadow: 0 2px 8px rgba(250,204,21,0.3);
+        }
+
+        /* PC 차단 메시지 */
+        .pc-block-screen {
+            display: none;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 40px 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .pc-block-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+        }
+
+        .pc-block-msg {
+            color: #ef4444;
+            font-size: 17px;
+            font-weight: 600;
+            line-height: 1.8;
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        /* 로딩 */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading[style*="display: block"] { display: flex !important; }
+
+        .loading::after {
+            content: '로딩중...';
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- 로그인 화면 (A 관리자용) -->
+        <div id="loginScreen" class="login-screen">
+            <div class="login-title">MBBC<br>WORLD</div>
+            <div class="login-box">
+                <div class="login-label">아이디 입력</div>
+                <input type="text" id="loginInput" class="login-input" placeholder="MBBC-XXXXX">
+                <button onclick="login()" class="login-btn">로그인</button>
+                <div id="loginError" class="login-error"></div>
+            </div>
+        </div>
+
+        <!-- 관리자 메인 화면 -->
+        <div id="adminScreen" class="admin-screen">
+            <div class="admin-header">
+                <div class="admin-title">MBBC WORLD</div>
+                <div class="mode-badge">● SENDER MODE</div>
+                <br>
+                <button onclick="logout()" class="logout-btn">로그아웃</button>
+            </div>
+
+            <div class="control-section">
+                <div class="section-title">PC 접근 제어</div>
+                <div class="control-item">
+                    <div class="control-label">컴퓨터 동영상 재생 허용</div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="pcAccessToggle" onchange="togglePcAccess()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div id="pcAccessStatus" class="status-message"></div>
+            </div>
+
+            <button onclick="showVideoUpload()" class="video-upload-btn">동영상 업로드</button>
+        </div>
+
+        <!-- 동영상 업로드 화면 -->
+        <div id="videoUploadScreen" class="video-upload-screen">
+            <button onclick="backToAdmin()" class="back-btn">← 돌아가기</button>
+
+            <div class="upload-header">
+                <div class="mode-badge">● SENDER MODE</div>
+                <div class="upload-title">동영상 업로드</div>
+            </div>
+
+            <div class="video-item">
+                <div class="video-name">겜블러가 패하는 이유</div>
+                <input type="text" id="link_session1" class="video-input" placeholder="Google Drive 공유 링크 입력">
+                <div class="video-btn-group">
+                    <button onclick="saveVideoLink('session1')" class="save-video-btn">저장</button>
+                    <button onclick="removeVideoLink('session1')" class="delete-video-btn">삭제</button>
+                </div>
+            </div>
+
+            <div class="video-item">
+                <div class="video-name">짝수선과 충돌선</div>
+                <input type="text" id="link_session2" class="video-input" placeholder="Google Drive 공유 링크 입력">
+                <div class="video-btn-group">
+                    <button onclick="saveVideoLink('session2')" class="save-video-btn">저장</button>
+                    <button onclick="removeVideoLink('session2')" class="delete-video-btn">삭제</button>
+                </div>
+            </div>
+
+            <div class="video-item">
+                <div class="video-name">중국점 공략수</div>
+                <input type="text" id="link_session3" class="video-input" placeholder="Google Drive 공유 링크 입력">
+                <div class="video-btn-group">
+                    <button onclick="saveVideoLink('session3')" class="save-video-btn">저장</button>
+                    <button onclick="removeVideoLink('session3')" class="delete-video-btn">삭제</button>
+                </div>
+            </div>
+
+            <div class="video-item">
+                <div class="video-name">붙는 형태(역수)</div>
+                <input type="text" id="link_session4" class="video-input" placeholder="Google Drive 공유 링크 입력">
+                <div class="video-btn-group">
+                    <button onclick="saveVideoLink('session4')" class="save-video-btn">저장</button>
+                    <button onclick="removeVideoLink('session4')" class="delete-video-btn">삭제</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- B 뷰어 화면 (URL ?v 로 직접 접근) -->
+        <div id="viewerScreen" class="viewer-screen">
+            <!-- 회사 정보 박스 -->
+            <div class="company-info-box">
+                <div class="company-title">MBBC WORLD</div>
+                <div class="company-info-line">한국(본사).미국지사</div>
+                <div class="company-info-line">
+                    <span class="kakao-icon">TALK</span>
+                    <span class="highlight">su25213</span>
+                </div>
+                <div class="company-info-line">
+                    중국지사&nbsp;
+                    <span class="wechat-icon">WeChat</span>
+                    <span class="highlight">jinhugen0301</span>
+                </div>
+                <div class="company-info-line">일본지사(총판) : 모집중</div>
+            </div>
+
+            <!-- 영상 버튼 목록 -->
+            <div class="session-list">
+                <button class="session-btn black" id="btn_session1" onclick="playVideo('session1')" disabled>
+                    <span class="session-dot" id="dot_session1"></span>
+                    <span>겜블러가 패하는 이유</span>
+                </button>
+
+                <button class="session-btn blue" id="btn_session2" onclick="playVideo('session2')" disabled>
+                    <span class="session-dot" id="dot_session2"></span>
+                    <span>짝수선과 충돌선</span>
+                </button>
+
+                <button class="session-btn black" id="btn_session3" onclick="playVideo('session3')" disabled>
+                    <span class="session-dot" id="dot_session3"></span>
+                    <span>중국점 공략수</span>
+                </button>
+
+                <button class="session-btn blue" id="btn_session4" onclick="playVideo('session4')" disabled>
+                    <span class="session-dot" id="dot_session4"></span>
+                    <span>붙는 형태(역수)</span>
+                </button>
+            </div>
+
+            <div class="thank-you">Thank&nbsp;&nbsp;you</div>
+        </div>
+
+        <!-- PC 차단 화면 -->
+        <div id="pcBlockScreen" class="pc-block-screen">
+            <div class="pc-block-title">MBBC WORLD</div>
+            <div class="pc-block-msg">
+                ⚠️ 현재 컴퓨터에서의<br>
+                동영상 재생이 제한되어 있습니다.<br><br>
+                📱 모바일에서 이용해주세요.
+            </div>
+        </div>
+
+        <!-- 로딩 -->
+        <div id="loading" class="loading"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-hpuvsuxfBEbJ7fL3tjscUJRJL13hztA",
+            authDomain: "mbbc-movie.firebaseapp.com",
+            projectId: "mbbc-movie",
+            storageBucket: "mbbc-movie.firebasestorage.app",
+            messagingSenderId: "915982695424",
+            appId: "1:915982695424:web:9ab504e302c8bc1b012ce5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        window.db = db;
+
+        // ── 관리자 고유 ID ──
+        const ADMIN_ID = 'MBBC-1203';
+
+        // ── PC 여부 판단 ──
+        function isPC() {
+            return !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+        }
+
+        // ── 화면 전환 ──
+        function showScreen(id) {
+            ['loginScreen','adminScreen','videoUploadScreen','viewerScreen','pcBlockScreen'].forEach(s => {
+                const el = document.getElementById(s);
+                el.style.display = 'none';
+            });
+            const target = document.getElementById(id);
+            // pc-block-screen 은 flex
+            target.style.display = (id === 'pcBlockScreen') ? 'flex' : 'block';
+        }
+
+        // ── 로딩 ──
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        // ── 구글 드라이브 링크 변환 ──
+        function convertToEmbedLink(link) {
+            const match = link.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (match) return `https://drive.google.com/file/d/${match[1]}/preview`;
+            return link;
+        }
+
+        // ══════════════════════════════
+        //  페이지 최초 로드 처리
+        // ══════════════════════════════
+        (async function init() {
+            const params = new URLSearchParams(window.location.search);
+
+            if (params.has('v')) {
+                // B 뷰어 모드 : URL에 ?v 포함 시 바로 뷰어 진입
+                if (isPC()) {
+                    // PC 접근 제어 확인
+                    try {
+                        const settingDoc = await getDoc(doc(db, 'promo_settings', 'pcAccess'));
+                        if (settingDoc.exists() && settingDoc.data().enabled === false) {
+                            showScreen('pcBlockScreen');
+                            return;
+                        }
+                    } catch(e) {}
+                }
+                showScreen('viewerScreen');
+                await loadViewerVideos();
+            } else {
+                // A 관리자 로그인 화면
+                showScreen('loginScreen');
+            }
+        })();
+
+        // ══════════════════════════════
+        //  A 관리자 로그인
+        // ══════════════════════════════
+        window.login = async function() {
+            const input = document.getElementById('loginInput').value.trim().toUpperCase();
+            const errorDiv = document.getElementById('loginError');
+
+            if (!input) {
+                errorDiv.textContent = '아이디를 입력하세요';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            errorDiv.style.display = 'none';
+
+            if (input === ADMIN_ID) {
+                showScreen('adminScreen');
+                await loadVideoLinks();
+                await loadPcAccessSetting();
+            } else {
+                errorDiv.textContent = '존재하지 않는 아이디입니다';
+                errorDiv.style.display = 'block';
+            }
+        };
+
+        window.logout = function() {
+            document.getElementById('loginInput').value = '';
+            showScreen('loginScreen');
+        };
+
+        // ══════════════════════════════
+        //  PC 접근 제어
+        // ══════════════════════════════
+        window.loadPcAccessSetting = async function() {
+            try {
+                const settingDoc = await getDoc(doc(db, 'promo_settings', 'pcAccess'));
+                const toggle = document.getElementById('pcAccessToggle');
+                const isEnabled = settingDoc.exists() ? settingDoc.data().enabled !== false : true;
+                toggle.checked = isEnabled;
+                updatePcAccessStatus(isEnabled);
+                if (!settingDoc.exists()) {
+                    await setDoc(doc(db, 'promo_settings', 'pcAccess'), { enabled: true, updatedAt: new Date().toISOString() });
+                }
+            } catch(e) { console.error(e); }
+        };
+
+        window.togglePcAccess = async function() {
+            const toggle = document.getElementById('pcAccessToggle');
+            const isEnabled = toggle.checked;
+            showLoading(true);
+            try {
+                await setDoc(doc(db, 'promo_settings', 'pcAccess'), { enabled: isEnabled, updatedAt: new Date().toISOString() });
+                updatePcAccessStatus(isEnabled);
+                alert(isEnabled ? 'PC 접근이 허용되었습니다.' : 'PC 접근이 차단되었습니다. (모바일만 가능)');
+            } catch(e) {
+                alert('설정 변경 중 오류가 발생했습니다');
+                toggle.checked = !isEnabled;
+            }
+            showLoading(false);
+        };
+
+        function updatePcAccessStatus(isEnabled) {
+            const status = document.getElementById('pcAccessStatus');
+            if (isEnabled) {
+                status.textContent = '✓ 현재 컴퓨터에서 동영상 재생 가능';
+                status.style.background = 'rgba(16,185,129,0.2)';
+                status.style.borderColor = 'rgba(16,185,129,0.3)';
+                status.style.color = '#6ee7b7';
+            } else {
+                status.textContent = '✕ 컴퓨터 차단 중 — 모바일만 재생 가능';
+                status.style.background = 'rgba(239,68,68,0.2)';
+                status.style.borderColor = 'rgba(239,68,68,0.3)';
+                status.style.color = '#fca5a5';
+            }
+        }
+
+        // ══════════════════════════════
+        //  동영상 업로드 화면
+        // ══════════════════════════════
+        window.showVideoUpload = function() { showScreen('videoUploadScreen'); };
+        window.backToAdmin    = function() { showScreen('adminScreen'); };
+
+        window.loadVideoLinks = async function() {
+            for (let i = 1; i <= 4; i++) {
+                const id = 'session' + i;
+                try {
+                    const d = await getDoc(doc(db, 'promo_videos', id));
+                    if (d.exists() && d.data().link) {
+                        const el = document.getElementById('link_' + id);
+                        if (el) el.value = d.data().link;
+                    }
+                } catch(e) {}
+            }
+        };
+
+        window.saveVideoLink = async function(sessionId) {
+            const input = document.getElementById('link_' + sessionId);
+            let link = input.value.trim();
+            if (!link) { alert('링크를 입력하세요'); return; }
+            link = convertToEmbedLink(link);
+            showLoading(true);
+            try {
+                await setDoc(doc(db, 'promo_videos', sessionId), { link, updatedAt: new Date().toISOString() });
+                input.value = link;
+                alert('저장 완료!');
+            } catch(e) { alert('저장 중 오류가 발생했습니다'); }
+            showLoading(false);
+        };
+
+        window.removeVideoLink = async function(sessionId) {
+            if (!confirm('이 동영상 링크를 삭제하시겠습니까?')) return;
+            showLoading(true);
+            try {
+                await setDoc(doc(db, 'promo_videos', sessionId), { link: '', updatedAt: new Date().toISOString() });
+                document.getElementById('link_' + sessionId).value = '';
+                alert('삭제 완료');
+            } catch(e) { alert('삭제 중 오류가 발생했습니다'); }
+            showLoading(false);
+        };
+
+        // ══════════════════════════════
+        //  B 뷰어 — 영상 버튼 활성화
+        // ══════════════════════════════
+        window.loadViewerVideos = async function() {
+            for (let i = 1; i <= 4; i++) {
+                const id = 'session' + i;
+                try {
+                    const d = await getDoc(doc(db, 'promo_videos', id));
+                    const btn = document.getElementById('btn_' + id);
+                    const dot = document.getElementById('dot_' + id);
+                    if (d.exists() && d.data().link) {
+                        btn.disabled = false;
+                        dot.classList.add('active');
+                    } else {
+                        btn.disabled = true;
+                        dot.classList.remove('active');
+                    }
+                } catch(e) {}
+            }
+        };
+
+        // ══════════════════════════════
+        //  B 뷰어 — 영상 재생
+        // ══════════════════════════════
+        window.playVideo = async function(sessionId) {
+            // PC 접근 제어 재확인
+            if (isPC()) {
+                try {
+                    const settingDoc = await getDoc(doc(db, 'promo_settings', 'pcAccess'));
+                    if (settingDoc.exists() && settingDoc.data().enabled === false) {
+                        alert('현재 컴퓨터에서의 동영상 재생이 제한되어 있습니다.\n모바일에서 이용해주세요.');
+                        return;
+                    }
+                } catch(e) {}
+            }
+            showLoading(true);
+            try {
+                const d = await getDoc(doc(db, 'promo_videos', sessionId));
+                if (d.exists() && d.data().link) {
+                    let link = d.data().link.replace('/preview', '/view');
+                    window.open(link, '_blank');
+                } else {
+                    alert('동영상이 아직 업로드되지 않았습니다');
+                }
+            } catch(e) { alert('동영상 재생 중 오류가 발생했습니다'); }
+            showLoading(false);
+        };
+
+        // Enter 키 로그인
+        document.getElementById('loginInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') login();
+        });
+    </script>
+</body>
+</html>
