@@ -521,10 +521,9 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
         </div>
       </div>
       <div>
-        <div class="video-placeholder" style="height:420px;border:2px solid rgba(184,134,11,0.2);">
-          <div style="text-align:center;">
-            <div class="play-btn" style="margin:0 auto 18px;">▶</div>
-            <p style="font-size:13px;color:var(--text-muted);letter-spacing:2px;" data-ko="등록 안내 영상" data-zh="注册说明视频" data-ja="登録案内動画">등록 안내 영상</p>
+        <div style="border:2px solid rgba(184,134,11,0.2);border-radius:4px;overflow:hidden;box-shadow:0 6px 30px rgba(0,0,0,0.1);">
+          <div style="position:relative;padding-bottom:56.25%;background:#1A1208;">
+            <iframe id="enrollVideo" src="https://drive.google.com/file/d/1b-JFI4GDHovEVrop4F0u3XEPtb8EnwEk/preview" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen allow="autoplay"></iframe>
           </div>
         </div>
       </div>
@@ -773,6 +772,13 @@ const videoLinks = {
   ja: 'https://drive.google.com/file/d/1AZxWRZ1uSwJH5xfjP3ey4AwenYAtNX9U/preview'
 };
 
+// 등록방법 언어별 동영상 링크
+const enrollVideoLinks = {
+  ko: 'https://drive.google.com/file/d/1b-JFI4GDHovEVrop4F0u3XEPtb8EnwEk/preview',
+  zh: 'https://drive.google.com/file/d/1cwZha8Z-fFczg-l1JSV3u5a-gJEtZ8FM/preview',
+  ja: 'https://drive.google.com/file/d/1YmHRgNMQnZrt4I2IxsElwCpwmccQP2Vg/preview'
+};
+
 // 언어 전환
 function setLang(lang, btn) {
   document.body.className = 'lang-' + lang;
@@ -792,6 +798,12 @@ function setLang(lang, btn) {
   if (iframe) {
     iframe.src = '';
     setTimeout(function() { iframe.src = videoLinks[lang]; }, 100);
+  }
+  // 등록방법 동영상 전환
+  const enrollIframe = document.getElementById('enrollVideo');
+  if (enrollIframe) {
+    enrollIframe.src = '';
+    setTimeout(function() { enrollIframe.src = enrollVideoLinks[lang]; }, 100);
   }
 }
 
