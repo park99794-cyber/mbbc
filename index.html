@@ -302,6 +302,19 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
 .footer-logo { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; letter-spacing: 8px; background: linear-gradient(135deg, var(--gold-dark), var(--gold-light), var(--gold-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; }
 .footer-text { font-size: 12px; color: var(--text-muted); letter-spacing: 2px; }
 
+/* 확대 안내 */
+.fullscreen-guide {
+  text-align: center;
+  color: #8B6914;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 8px;
+  margin-bottom: 10px;
+  background: rgba(184,134,11,0.08);
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
 /* ===== 반응형 ===== */
 @media (max-width: 1024px) {
   .section-wrap { padding: 80px 30px; }
@@ -310,34 +323,36 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
   .offices-grid { grid-template-columns: repeat(2,1fr); }
 }
 
-/* ===== 모바일 네비 메뉴 (가로 스크롤) ===== */
+/* ===== 모바일 네비 메뉴 ===== */
 @media (max-width: 900px) {
   nav {
-    padding: 10px 14px;
-    flex-wrap: nowrap;
+    padding: 6px 10px;
+    flex-wrap: wrap;
     align-items: center;
+    gap: 4px;
   }
-  .nav-logo { font-size: 16px; letter-spacing: 3px; white-space: nowrap; }
+  .nav-logo { font-size: 15px; letter-spacing: 2px; white-space: nowrap; }
   .nav-center {
     display: flex !important;
     gap: 0;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    flex: 1;
-    padding: 0 10px;
+    width: 100%;
+    order: 3;
+    padding: 2px 0;
   }
   .nav-center::-webkit-scrollbar { display: none; }
   .nav-center li { flex-shrink: 0; }
   .nav-center a {
     font-size: 11px;
-    letter-spacing: 1px;
-    padding: 4px 10px;
+    letter-spacing: 0px;
+    padding: 4px 8px;
     white-space: nowrap;
     display: block;
   }
-  .lang-bar { flex-shrink: 0; gap: 2px; }
-  .lang-btn { padding: 5px 8px; font-size: 11px; }
+  .lang-bar { flex-shrink: 0; gap: 2px; margin-left: auto; }
+  .lang-btn { padding: 4px 7px; font-size: 10px; }
 }
 
 @media (max-width: 768px) {
@@ -408,6 +423,28 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
   .hero-desc { font-size: 13px; margin-bottom: 12px; }
   .hero-btn { padding: 10px 24px; font-size: 12px; }
 }
+
+/* 모바일 홈으로 버튼 */
+.mobile-close-btn {
+  display: none;
+}
+@media (max-width: 768px) {
+  .mobile-close-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(184,134,11,0.9);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    margin-bottom: 10px;
+  }
+}
 </style>
 </head>
 <body class="lang-ko">
@@ -457,22 +494,18 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
 
 <!-- 교육 프로그램 -->
 <div class="programs-bg page-section" id="programs">
-  <!-- 헤더 영역 - 이미지 디자인 재현 -->
-  <div style="background:#E8E4D6;padding:70px 80px 50px;text-align:center;">
-    <p style="font-size:12px;letter-spacing:8px;color:#8B6914;text-transform:uppercase;margin-bottom:20px;font-weight:600;"
+  <div style="background:#E8E4D6;padding:30px 20px 20px;text-align:center;">
+    <p style="font-size:12px;letter-spacing:8px;color:#8B6914;text-transform:uppercase;margin-bottom:10px;font-weight:600;"
        data-ko="EDUCATION PROGRAM" data-zh="教育课程" data-ja="教育プログラム">EDUCATION PROGRAM</p>
-    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(40px,5vw,70px);font-weight:900;color:#1A1208;margin-bottom:18px;">
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,50px);font-weight:900;color:#1A1208;margin-bottom:10px;">
       <span data-ko="체계적인 " data-zh="系统化的 " data-ja="体系的な ">체계적인 </span><span style="color:#B8860B;" data-ko="교육과정" data-zh="教育课程" data-ja="教育課程">교육과정</span>
     </h2>
-    <p style="font-size:clamp(16px,2vw,24px);color:#2D6A2D;font-weight:700;letter-spacing:1px;"
+    <p style="font-size:clamp(14px,2vw,18px);color:#2D6A2D;font-weight:700;letter-spacing:1px;margin-bottom:20px;"
        data-ko="*교육 내용중 궁금한 내용은 메신저로 질문*"
        data-zh="*教育内容中有疑问请通过信使提问*"
        data-ja="*教育内容でご不明な点はメッセンジャーでご質問ください*">*교육 내용중 궁금한 내용은 메신저로 질문*</p>
-  </div>
-
-  <!-- 동영상 1개 크게 -->
-  <div style="background:#F0EAE0;padding:40px 80px 80px;">
-    <div style="max-width:900px;margin:0 auto;background:#fff;border:2px solid rgba(184,134,11,0.2);border-radius:4px;overflow:hidden;box-shadow:0 6px 30px rgba(0,0,0,0.1);">
+    <div class="fullscreen-guide" data-ko="⛶ 확대를 누르세요" data-zh="⛶ 请点击放大" data-ja="⛶ 拡大してください">⛶ 확대를 누르세요</div>
+    <div style="max-width:900px;margin:0 auto;border:2px solid rgba(184,134,11,0.2);border-radius:4px;overflow:hidden;box-shadow:0 6px 30px rgba(0,0,0,0.1);">
       <div style="position:relative;padding-bottom:56.25%;background:#1A1208;">
         <iframe id="mainVideo" src="https://drive.google.com/file/d/12_NvAyT48219z1fC4-LYcGX3sRhUTepO/preview" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen allow="autoplay"></iframe>
       </div>
@@ -487,7 +520,8 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
   <div class="section-wrap">
     <p class="section-label" data-ko="HOW TO ENROLL" data-zh="HOW TO ENROLL" data-ja="HOW TO ENROLL">HOW TO ENROLL</p>
     <h2 class="section-title" data-ko="간편한 <span class='gold'>교육 등록</span>" data-zh="简便的 <span class='gold'>教育注册</span>" data-ja="簡単な <span class='gold'>教育登録</span>">간편한 <span class="gold">교육 등록</span></h2>
-    <div style="max-width:900px;margin:30px auto 0;border:2px solid rgba(184,134,11,0.2);border-radius:4px;overflow:hidden;box-shadow:0 6px 30px rgba(0,0,0,0.1);">
+    <div class="fullscreen-guide" data-ko="⛶ 확대를 누르세요" data-zh="⛶ 请点击放大" data-ja="⛶ 拡大してください">⛶ 확대를 누르세요</div>
+    <div style="max-width:900px;margin:0 auto;border:2px solid rgba(184,134,11,0.2);border-radius:4px;overflow:hidden;box-shadow:0 6px 30px rgba(0,0,0,0.1);">
       <div style="position:relative;padding-bottom:56.25%;background:#1A1208;">
         <iframe id="enrollVideo" src="https://drive.google.com/file/d/1b-JFI4GDHovEVrop4F0u3XEPtb8EnwEk/preview" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen allow="autoplay"></iframe>
       </div>
@@ -694,7 +728,6 @@ function goHome() {
   document.querySelector('.hero').style.display = 'flex';
   document.getElementById('pageFooter').style.display = 'none';
   document.querySelectorAll('.nav-center a').forEach(a => a.classList.remove('nav-active'));
-  // 영상 정지
   const iframe = document.getElementById('mainVideo');
   if (iframe) iframe.src = '';
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -720,6 +753,16 @@ function showSection(id) {
     const currentLang = document.body.className.replace('lang-', '') || 'ko';
     if (iframe && videoLinks[currentLang]) {
       setTimeout(function() { iframe.src = videoLinks[currentLang]; }, 100);
+    }
+  }
+  // 등록방법이 아닌 메뉴 클릭 시 등록방법 영상 정지
+  const enrollIframe = document.getElementById('enrollVideo');
+  if (id !== 'enroll') {
+    if (enrollIframe) enrollIframe.src = '';
+  } else {
+    const currentLang = document.body.className.replace('lang-', '') || 'ko';
+    if (enrollIframe && enrollVideoLinks[currentLang]) {
+      setTimeout(function() { enrollIframe.src = enrollVideoLinks[currentLang]; }, 100);
     }
   }
 }
