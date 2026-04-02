@@ -620,7 +620,7 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
 <div class="contact-bg page-section" id="contact">
   <div class="section-wrap" style="padding-top:0;padding-bottom:0;">
     <p class="section-label">GLOBAL OFFICES</p>
-    <h2 class="section-title" data-ko="전 세계 <span class='gold'>지사 안내</span>" data-zh="全球 <span class='gold'>分公司介绍</span>" data-ja="世界の <span class='gold'>支社案内</span>">전 세계 <span class="gold">지사 안내</span></h2>
+    <h2 class="section-title" data-ko="전 세계 <span class='gold'>지사 안내</span><span style='color:#1A1208;font-size:0.75em;'>(각 지역 총판모집)</span>" data-zh="全球 <span class='gold'>分公司介绍</span><span style='color:#1A1208;font-size:0.75em;'>(各地区总代理招募)</span>" data-ja="世界の <span class='gold'>支社案内</span><span style='color:#1A1208;font-size:0.75em;'>(各地域総代理店募集)</span>">전 세계 <span class="gold">지사 안내</span><span style="color:#1A1208;font-size:0.75em;">(각 지역 총판모집)</span></h2>
     <div class="offices-grid">
 
       <!-- 한국 본사 -->
@@ -736,19 +736,14 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
 
 <!-- 회원등록제 -->
 <div id="membership" class="page-section">
-  <div class="section-wrap" style="min-height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+  <div class="section-wrap" style="text-align:center;">
     <p class="section-label" data-ko="MEMBERSHIP" data-zh="会员登录制" data-ja="会員登録制">MEMBERSHIP</p>
     <h2 class="section-title" data-ko="<span class='gold'>회원등록제</span>" data-zh="<span class='gold'>会员登录制</span>" data-ja="<span class='gold'>会員登録制</span>"><span class="gold">회원등록제</span></h2>
-    <div style="margin-top:50px;padding:60px 50px;border:2px solid rgba(184,134,11,0.25);background:rgba(184,134,11,0.04);border-radius:4px;max-width:600px;">
-      <div style="font-size:60px;margin-bottom:30px;opacity:0.4;">⏳</div>
-      <p style="font-family:'Playfair Display',serif;font-size:clamp(20px,3vw,30px);color:#B8860B;font-weight:700;margin-bottom:14px;"
-         data-ko="아직 서비스 준비가 되지 않았습니다"
-         data-zh="该服务尚未准备好"
-         data-ja="サービスはまだ準備中です">아직 서비스 준비가 되지 않았습니다</p>
-      <p style="font-size:14px;color:#8B6914;letter-spacing:3px;text-transform:uppercase;"
-         data-ko="COMING SOON"
-         data-zh="敬请期待"
-         data-ja="近日公開">COMING SOON</p>
+    <div class="fullscreen-guide" data-ko="⛶ 확대를 누르세요" data-zh="⛶ 请点击放大" data-ja="⛶ 拡大してください">⛶ 확대를 누르세요</div>
+    <div style="max-width:900px;margin:0 auto;border:2px solid rgba(184,134,11,0.2);border-radius:4px;overflow:hidden;box-shadow:0 6px 30px rgba(0,0,0,0.1);">
+      <div style="position:relative;padding-bottom:56.25%;background:#1A1208;">
+        <iframe id="membershipVideo" src="https://drive.google.com/file/d/1HltbWg93ueeAtXDS3helczewGStvN_3I/preview" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen allow="autoplay"></iframe>
+      </div>
     </div>
   </div>
 </div>
@@ -823,6 +818,16 @@ function showSection(id) {
       setTimeout(function() { specialIframe.src = specialVideoLinks[currentLang]; }, 100);
     }
   }
+  // 회원등록제가 아닌 메뉴 클릭 시 영상 정지
+  const membershipIframe = document.getElementById('membershipVideo');
+  if (id !== 'membership') {
+    if (membershipIframe) membershipIframe.src = '';
+  } else {
+    const currentLang = document.body.className.replace('lang-', '') || 'ko';
+    if (membershipIframe && membershipVideoLinks[currentLang]) {
+      setTimeout(function() { membershipIframe.src = membershipVideoLinks[currentLang]; }, 100);
+    }
+  }
 }
 
 // 히어로 이미지 애니메이션
@@ -849,6 +854,13 @@ const specialVideoLinks = {
   ko: 'https://drive.google.com/file/d/1qh0XPoa8ABRZmVSPsQT0EQZMMYhxhQ2O/preview',
   zh: 'https://drive.google.com/file/d/1J8GNKeSEifqajtE24XlDqRoHQOGlxeX9/preview',
   ja: 'https://drive.google.com/file/d/1d9hVzG5-no0l1FOcE5sG320pGgyhEG3x/preview'
+};
+
+// 회원등록제 언어별 동영상 링크
+const membershipVideoLinks = {
+  ko: 'https://drive.google.com/file/d/1HltbWg93ueeAtXDS3helczewGStvN_3I/preview',
+  zh: 'https://drive.google.com/file/d/1uRD74gQofiEFaY3CSnolh3SeYAqDBrGX/preview',
+  ja: 'https://drive.google.com/file/d/1qGJidWcNsw37pbslF0mFyr105Ntn5hv-/preview'
 };
 
 // 언어 전환
@@ -882,6 +894,12 @@ function setLang(lang, btn) {
   if (specialIframe) {
     specialIframe.src = '';
     setTimeout(function() { specialIframe.src = specialVideoLinks[lang]; }, 100);
+  }
+  // 회원등록제 동영상 전환
+  const membershipIframe = document.getElementById('membershipVideo');
+  if (membershipIframe) {
+    membershipIframe.src = '';
+    setTimeout(function() { membershipIframe.src = membershipVideoLinks[lang]; }, 100);
   }
 }
 
