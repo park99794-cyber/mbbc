@@ -456,6 +456,38 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
   50%      { box-shadow: 0 0 50px rgba(218,165,32,0.8); }
 }
 </style>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, get, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCwguFl5S1htktkKK2yaUfJyNrgLKmsikL0",
+      authDomain: "mbbc-world.firebaseapp.com",
+      databaseURL: "https://mbbc-world-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "mbbc-world",
+      storageBucket: "mbbc-world.firebasestorage.app",
+      messagingSenderId: "597034575615",
+      appId: "1:597034575615:web:3d5a267436314bd6214eca",
+      measurementId: "G-GX37CX1Z0E"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // 전역으로 Firebase 함수 노출
+    window.fbDb = db;
+    window.fbRef = ref;
+    window.fbSet = set;
+    window.fbGet = get;
+    window.fbRemove = remove;
+
+    // 페이지 로드시 영상 데이터 불러오기
+    window.addEventListener('load', function() {
+      window.msgLoadVideosFromDB();
+    });
+  </script>
 </head>
 <body class="lang-ko">
 
@@ -1118,12 +1150,37 @@ function msgToEmbed(url){
   return url;
 }
 
+// 메모리 캐시 (Firebase에서 불러온 데이터 저장)
+var msgVideosCache = { position: [], system: [] };
+
 function msgGetVideos(type){
-  try{return JSON.parse(localStorage.getItem('msg_'+type+'_videos')||'[]');}
-  catch(e){return [];}
+  return msgVideosCache[type] || [];
 }
-function msgSaveVideos(type,arr){
-  localStorage.setItem('msg_'+type+'_videos',JSON.stringify(arr));
+function msgSaveVideos(type, arr){
+  msgVideosCache[type] = arr;
+}
+
+// Firebase에서 영상 데이터 불러오기
+window.msgLoadVideosFromDB = function(){
+  if(!window.fbDb) return;
+  ['position','system'].forEach(function(type){
+    var dbRef = window.fbRef(window.fbDb, 'msg_videos/' + type);
+    window.fbGet(dbRef).then(function(snapshot){
+      if(snapshot.exists()){
+        msgVideosCache[type] = snapshot.val() || [];
+      } else {
+        msgVideosCache[type] = [];
+      }
+    }).catch(function(e){ console.log('DB 읽기 오류:', e); });
+  });
+};
+
+// Firebase에 영상 데이터 저장
+function msgSaveVideosToDB(type, arr){
+  msgVideosCache[type] = arr;
+  if(!window.fbDb) return;
+  var dbRef = window.fbRef(window.fbDb, 'msg_videos/' + type);
+  window.fbSet(dbRef, arr).catch(function(e){ console.log('DB 저장 오류:', e); });
 }
 
 function msgPlayBySlot(type,idx){
@@ -1243,7 +1300,7 @@ function msgAdminSaveSlot(type,idx){
     var videos=msgGetVideos(type);
     while(videos.length<=idx) videos.push({url:''});
     videos[idx]={url:url};
-    msgSaveVideos(type,videos);
+    msgSaveVideosToDB(type,videos);
     alert((idx+1)+'회차 영상이 저장되었습니다!');
   });
 }
@@ -1252,7 +1309,7 @@ function msgAdminDeleteSlot(type,idx){
   msgShowConfirm((idx+1)+'회차 영상을 삭제하시겠습니까?',function(){
     var videos=msgGetVideos(type);
     if(videos[idx]) videos[idx]={url:''};
-    msgSaveVideos(type,videos);
+    msgSaveVideosToDB(type,videos);
     var inp=document.getElementById(type+'_slot_'+idx);
     if(inp) inp.value='';
     alert((idx+1)+'회차 영상이 삭제되었습니다!');
