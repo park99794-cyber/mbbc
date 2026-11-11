@@ -315,6 +315,23 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
   letter-spacing: 1px;
 }
 
+/* ===== 영상 목록 (유튜브 / 회원등록제) ===== */
+.vlist { max-width:900px; margin:18px auto 0; display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; text-align:left; }
+.vlist button { background:#1A1208; color:#E8E4D6; border:1px solid rgba(184,134,11,0.35); border-radius:4px; padding:12px 14px; font-size:14px; cursor:pointer; display:flex; gap:10px; align-items:center; transition:all 0.2s; font-family:inherit; }
+.vlist button:hover { border-color:#DAA520; }
+.vlist button.on { background:#B8860B; color:#fff; border-color:#B8860B; }
+.vlist .vnum { color:#DAA520; font-weight:700; min-width:22px; }
+.vlist button.on .vnum { color:#fff; }
+.vlist .vtt { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.vnow { max-width:900px; margin:12px auto 0; font-size:16px; font-weight:700; color:#1A1208; text-align:left; }
+.vip-band { display:flex; align-items:center; justify-content:center; gap:60px; flex-wrap:wrap; }
+.vip-btn { background:transparent; border:none; cursor:pointer; display:flex; align-items:center; gap:8px; font-size:20px; color:#1A1208; font-family:inherit; padding:0; }
+.vip-btn .arr { background:#000; color:#B6F5C9; padding:0 12px; height:26px; display:inline-flex; align-items:center; font-size:22px; line-height:1; }
+.vip-btn:hover .arr { color:#FFD700; }
+.vip-state { font-size:13px; color:#2D6A2D; font-weight:700; }
+.mem-lock { max-width:900px; margin:18px auto 0; padding:16px; border:1px dashed rgba(184,134,11,0.45); border-radius:4px; color:#8B6914; font-size:14px; }
+.adm-in { width:100%; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; padding:12px 14px; font-size:13px; outline:none; box-sizing:border-box; }
+
 /* ===== 반응형 ===== */
 @media (max-width: 1024px) {
   .section-wrap { padding: 80px 30px; }
@@ -500,7 +517,7 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
     <li><a href="javascript:void(0)" onclick="showSection('enroll')" data-ko="등록방법" data-zh="报名" data-ja="登録">등록방법</a></li>
     <li><a href="javascript:void(0)" onclick="showSection('faq')" data-ko="자주묻는질문" data-zh="常见问题" data-ja="よくある質問">자주묻는질문</a></li>
     <li><a href="javascript:void(0)" onclick="showSection('contact')" data-ko="연락처" data-zh="联系" data-ja="お問합せ">연락처</a></li>
-    <li><a href="javascript:void(0)" onclick="showSection('special')" data-ko="특별서비스" data-zh="特别服务" data-ja="特別サービス">특별서비스</a></li>
+    <li><a href="javascript:void(0)" onclick="showSection('youtube')" data-ko="유튜브스트리밍" data-zh="YouTube直播" data-ja="YouTube配信">유튜브스트리밍</a></li>
     <li><a href="javascript:void(0)" onclick="showSection('membership')" data-ko="회원등록제" data-zh="会员登录制" data-ja="会員登録制">회원등록제</a></li>
   </ul>
   <div class="lang-bar">
@@ -581,7 +598,7 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
   </div>
 
   <!-- [6] 관리자 로그인 모달 -->
-  <div id="msgAdminLoginModal" style="display:none;position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,0.92);align-items:center;justify-content:center;">
+  <div id="msgAdminLoginModal" style="display:none;position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,0.92);align-items:center;justify-content:center;flex-direction:column;gap:24px;overflow-y:auto;">
     <div style="background:#1a2035;border-radius:16px;padding:40px 30px;width:340px;max-width:90vw;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
       <p style="font-size:13px;font-weight:700;color:#fff;letter-spacing:2px;margin-bottom:24px;">관리자 로그인</p>
       <input id="adminIdInput" type="text" placeholder="아이디 입력" style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;padding:14px 16px;font-size:14px;margin-bottom:12px;outline:none;text-align:center;letter-spacing:2px;"
@@ -590,6 +607,47 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
       <div style="display:flex;gap:10px;">
         <button onclick="msgAdminLogin()" style="flex:1;background:#2ecc71;border:none;border-radius:8px;color:#fff;padding:14px;font-size:14px;font-weight:700;cursor:pointer;">로그인</button>
         <button onclick="document.getElementById('msgAdminLoginModal').style.display='none'" style="flex:1;background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:rgba(255,255,255,0.7);padding:14px;font-size:14px;cursor:pointer;">취소</button>
+      </div>
+    </div>
+    <!-- 회원 등록제 관리자 -->
+    <div style="background:#1a2035;border-radius:16px;padding:34px 30px;width:340px;max-width:90vw;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+      <p style="font-size:19px;color:#fff;letter-spacing:2px;margin-bottom:22px;">회원 등록제 관리자</p>
+      <input id="memAdminIdInput" type="text" placeholder="아이디 입력" style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;padding:14px 16px;font-size:14px;margin-bottom:12px;outline:none;text-align:center;letter-spacing:2px;"
+        onkeydown="if(event.key==='Enter')memAdminLogin()">
+      <p id="memAdminLoginError" style="color:#ff4444;font-size:12px;margin-bottom:12px;display:none;">아이디가 틀렸습니다</p>
+      <div style="display:flex;gap:10px;">
+        <button onclick="memAdminLogin()" style="flex:1;background:#2ecc71;border:none;border-radius:8px;color:#fff;padding:14px;font-size:14px;font-weight:700;cursor:pointer;">로그인</button>
+        <button onclick="document.getElementById('msgAdminLoginModal').style.display='none'" style="flex:1;background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:rgba(255,255,255,0.7);padding:14px;font-size:14px;cursor:pointer;">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 회원 등록제 관리자 창 (회원 ID 생성) -->
+  <div id="memAdminPanel" style="display:none;position:fixed;inset:0;z-index:5000;background:#141b2d;overflow-y:auto;">
+    <div style="max-width:600px;margin:0 auto;padding:24px 20px 40px;">
+      <p style="text-align:center;color:#fff;font-size:30px;font-weight:900;letter-spacing:4px;margin:10px 0 16px;">MBBC WORLD</p>
+      <div style="display:flex;justify-content:center;gap:12px;margin-bottom:24px;">
+        <span style="background:#e74c3c;color:#fff;font-size:14px;font-weight:700;padding:10px 22px;border-radius:24px;">● SENDER MODE</span>
+        <button onclick="memAdminLogout()" style="background:#2a3555;border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:13px;padding:8px 22px;border-radius:8px;cursor:pointer;">로그아웃</button>
+      </div>
+      <div style="background:#1e2a3d;border-radius:14px;padding:20px;margin-bottom:18px;">
+        <p style="color:#fff;font-size:17px;font-weight:700;margin-bottom:12px;">회원 ID 관리</p>
+        <span id="memCount" style="display:inline-block;background:#3b82f6;color:#fff;font-size:13px;font-weight:700;padding:5px 11px;border-radius:6px;margin-bottom:12px;">0</span>
+        <input id="memNewIdInput" type="text" class="adm-in" placeholder="특정 ID 입력 (비우면 랜덤 생성)" style="text-align:center;padding:15px;font-size:14px;background:#141b2d;margin-bottom:14px;" onkeydown="if(event.key==='Enter')memCreateId()">
+        <button onclick="memCreateId()" style="width:100%;background:linear-gradient(90deg,#10b981,#059669);border:none;border-radius:10px;color:#fff;padding:16px;font-size:17px;font-weight:700;cursor:pointer;margin-bottom:14px;">새 ID 생성</button>
+        <div id="memIdList"></div>
+      </div>
+      <div style="background:#1e2a3d;border-radius:14px;padding:20px;">
+        <p style="color:#fff;font-size:17px;font-weight:700;margin-bottom:14px;">PC 접근 제어</p>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <span style="color:#fff;font-size:15px;">컴퓨터용 동영상 재생</span>
+          <label style="position:relative;width:64px;height:34px;cursor:pointer;">
+            <input type="checkbox" id="memPcToggle" onchange="memSetPc(this.checked)" style="opacity:0;width:0;height:0;">
+            <span id="memPcTrack" style="position:absolute;inset:0;border-radius:34px;background:#4b5563;transition:0.2s;"></span>
+            <span id="memPcKnob" style="position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:50%;background:#fff;transition:0.2s;"></span>
+          </label>
+        </div>
+        <div id="memPcStatus" style="border-radius:6px;padding:10px 12px;font-size:13px;"></div>
       </div>
     </div>
   </div>
@@ -603,12 +661,16 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
     </div>
     <!-- 닫기 버튼 -->
     <button onclick="msgAdminLogout()" style="position:absolute;top:16px;right:20px;background:transparent;border:none;color:rgba(255,255,255,0.4);font-size:20px;cursor:pointer;">✕</button>
-    <!-- 메뉴 버튼 2개 -->
+    <!-- 메뉴 버튼 4개 -->
     <div style="display:flex;flex-direction:column;gap:20px;width:300px;margin-top:60px;">
       <button onclick="msgAdminShowPosition()" style="background:#2a3555;border:none;border-radius:12px;color:#fff;padding:22px;font-size:18px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background 0.2s;"
         onmouseover="this.style.background='#3a4570';" onmouseout="this.style.background='#2a3555';">포지션 동영상 업로드</button>
       <button onclick="msgAdminShowSystem()" style="background:#2a3555;border:none;border-radius:12px;color:#fff;padding:22px;font-size:18px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background 0.2s;"
         onmouseover="this.style.background='#3a4570';" onmouseout="this.style.background='#2a3555';">시스템 동영상 업로드</button>
+      <button onclick="msgAdminShowPanel('youtube')" style="background:#2a3555;border:none;border-radius:12px;color:#fff;padding:22px;font-size:18px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background 0.2s;"
+        onmouseover="this.style.background='#3a4570';" onmouseout="this.style.background='#2a3555';">유튜브 스트리밍</button>
+      <button onclick="msgAdminShowPanel('membership')" style="background:#2a3555;border:none;border-radius:12px;color:#fff;padding:22px;font-size:18px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background 0.2s;"
+        onmouseover="this.style.background='#3a4570';" onmouseout="this.style.background='#2a3555';">회원 등록제</button>
     </div>
   </div>
 
@@ -636,6 +698,33 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
       <!-- 1~5회차 -->
       <div id="systemUploadSlots"></div>
       <!-- 뒤로가기 -->
+      <button onclick="msgAdminShowMain()" style="width:100%;background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:#fff;padding:14px;font-size:14px;cursor:pointer;margin-top:10px;margin-bottom:30px;">← 뒤로</button>
+    </div>
+  </div>
+
+  <!-- [유튜브 스트리밍] 업로드 패널 -->
+  <div id="msgAdmin_youtube_Panel" style="display:none;position:fixed;inset:0;z-index:5000;background:#1a2035;overflow-y:auto;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+      <div style="background:#2a3555;border-radius:12px;padding:20px;text-align:center;margin-bottom:24px;">
+        <p style="color:#fff;font-size:20px;font-weight:700;letter-spacing:1px;">유튜브 스트리밍 동영상 업로드</p>
+        <p style="color:rgba(255,255,255,0.6);font-size:12px;margin-top:8px;">최대 20개 · 유튜브 또는 Google Drive 링크 · 누구나 시청 가능</p>
+      </div>
+      <div id="youtubeUploadSlots"></div>
+      <button onclick="msgAdminShowMain()" style="width:100%;background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:#fff;padding:14px;font-size:14px;cursor:pointer;margin-top:10px;margin-bottom:30px;">← 뒤로</button>
+    </div>
+  </div>
+
+  <!-- [회원 등록제] 업로드 패널 -->
+  <div id="msgAdmin_membership_Panel" style="display:none;position:fixed;inset:0;z-index:5000;background:#1a2035;overflow-y:auto;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+      <div style="background:#2a3555;border-radius:12px;padding:20px;text-align:center;margin-bottom:24px;">
+        <p style="color:#fff;font-size:20px;font-weight:700;letter-spacing:1px;">회원 등록제 동영상 업로드</p>
+        <p style="color:rgba(255,255,255,0.6);font-size:12px;margin-top:8px;">유튜브 또는 Google Drive 링크</p>
+      </div>
+      <p style="color:#DAA520;font-size:16px;font-weight:700;margin:6px 0 12px;">① 안내영상 (누구나 시청) · 중국어/일본어가 비어있으면 한국어 영상</p>
+      <div id="membershipUploadSlots"></div>
+      <p style="color:#DAA520;font-size:16px;font-weight:700;margin:22px 0 12px;">② 특별회원 영상 (아이디 입력 후 시청) · 최대 20개</p>
+      <div id="member_videosUploadSlots"></div>
       <button onclick="msgAdminShowMain()" style="width:100%;background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:#fff;padding:14px;font-size:14px;cursor:pointer;margin-top:10px;margin-bottom:30px;">← 뒤로</button>
     </div>
   </div>
@@ -829,13 +918,13 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
   </div>
 </div>
 
-<!-- 특별서비스 -->
-<div id="special" class="page-section">
+<!-- 유튜브 스트리밍 (관리자 업로드) -->
+<div id="youtube" class="page-section">
   <div style="background:#E8E4D6;padding:30px 20px 20px;text-align:center;">
     <p style="font-size:12px;letter-spacing:8px;color:#8B6914;text-transform:uppercase;margin-bottom:10px;font-weight:600;"
-       data-ko="SPECIAL SERVICE" data-zh="特别服务" data-ja="特別サービス">SPECIAL SERVICE</p>
+       data-ko="YOUTUBE STREAMING" data-zh="YouTube直播" data-ja="YouTube配信">YOUTUBE STREAMING</p>
     <h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,50px);font-weight:900;color:#1A1208;margin-bottom:10px;">
-      <span data-ko="MBBC WORLD " data-zh="MBBC WORLD " data-ja="MBBC WORLD ">MBBC WORLD </span><span style="color:#B8860B;" data-ko="특별서비스" data-zh="特别服务" data-ja="特別サービス">특별서비스</span>
+      <span data-ko="MBBC WORLD " data-zh="MBBC WORLD " data-ja="MBBC WORLD ">MBBC WORLD </span><span style="color:#B8860B;" data-ko="유튜브 스트리밍" data-zh="YouTube直播" data-ja="YouTube配信">유튜브 스트리밍</span>
     </h2>
     <p style="font-size:clamp(14px,2vw,18px);color:#2D6A2D;font-weight:700;letter-spacing:1px;margin-bottom:20px;"
        data-ko="*궁금한 내용은 메신저로 질문*"
@@ -844,9 +933,12 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
     <div class="fullscreen-guide" data-ko="⛶ 확대를 누르세요" data-zh="⛶ 请点击放大" data-ja="⛶ 拡大してください">⛶ 확대를 누르세요</div>
     <div style="max-width:900px;margin:0 auto;border:2px solid rgba(184,134,11,0.2);border-radius:4px;overflow:hidden;box-shadow:0 6px 30px rgba(0,0,0,0.1);">
       <div style="position:relative;padding-bottom:56.25%;background:#1A1208;">
-        <iframe id="specialVideo" src="https://drive.google.com/file/d/1qh0XPoa8ABRZmVSPsQT0EQZMMYhxhQ2O/preview" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen allow="autoplay"></iframe>
+        <iframe id="youtubeVideo" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+        <div id="youtubeEmpty" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;color:rgba(232,228,214,0.7);font-size:16px;letter-spacing:2px;">준비 중입니다</div>
       </div>
     </div>
+    <div class="vnow" id="youtubeNow"></div>
+    <div class="vlist" id="youtubeList"></div>
   </div>
 </div>
 
@@ -857,10 +949,31 @@ footer { padding: 55px; text-align: center; border-top: 1px solid rgba(184,134,1
   <div class="section-wrap" style="text-align:center;">
     <p class="section-label" data-ko="MEMBERSHIP" data-zh="会员登录制" data-ja="会員登録制">MEMBERSHIP</p>
     <h2 class="section-title" data-ko="<span class='gold'>회원등록제</span>" data-zh="<span class='gold'>会员登录制</span>" data-ja="<span class='gold'>会員登録制</span>"><span class="gold">회원등록제</span></h2>
-    <div class="fullscreen-guide" data-ko="⛶ 확대를 누르세요" data-zh="⛶ 请点击放大" data-ja="⛶ 拡大してください">⛶ 확대를 누르세요</div>
+    <div class="fullscreen-guide vip-band">
+      <span data-ko="⛶ 확대를 누르세요" data-zh="⛶ 请点击放大" data-ja="⛶ 拡大してください">⛶ 확대를 누르세요</span>
+      <button class="vip-btn" onclick="memOpenLogin()"><span data-ko="특별회원" data-zh="特别会员" data-ja="特別会員">특별회원</span><span class="arr">&#10142;</span></button>
+      <span class="vip-state" id="memState"></span>
+    </div>
     <div style="max-width:900px;margin:0 auto;border:2px solid rgba(184,134,11,0.2);border-radius:4px;overflow:hidden;box-shadow:0 6px 30px rgba(0,0,0,0.1);">
       <div style="position:relative;padding-bottom:56.25%;background:#1A1208;">
-        <iframe id="membershipVideo" src="https://drive.google.com/file/d/1HltbWg93ueeAtXDS3helczewGStvN_3I/preview" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen allow="autoplay"></iframe>
+        <iframe id="membershipVideo" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+        <div id="membershipBlock" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:#E8E4D6;font-size:16px;padding:20px;"></div>
+      </div>
+    </div>
+    <div class="vnow" id="membershipNow"></div>
+    <div class="vlist" id="membershipList"></div>
+    <div class="mem-lock" id="memLockMsg" data-ko="🔒 특별회원 영상은 특별회원 버튼을 누르고 아이디를 입력하면 시청할 수 있습니다" data-zh="🔒 点击特别会员按钮并输入ID即可观看会员视频" data-ja="🔒 特別会員ボタンを押してIDを入力すると会員動画を視聴できます">🔒 특별회원 영상은 특별회원 버튼을 누르고 아이디를 입력하면 시청할 수 있습니다</div>
+  </div>
+
+  <!-- 특별회원 로그인 창 -->
+  <div id="memLoginModal" style="display:none;position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;">
+    <div style="background:#1a2035;border-radius:16px;padding:36px 30px;width:340px;max-width:90vw;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+      <p style="font-size:18px;color:#fff;letter-spacing:2px;margin-bottom:22px;" data-ko="특별회원 로그인" data-zh="特别会员登录" data-ja="特別会員ログイン">특별회원 로그인</p>
+      <input id="memIdInput" type="text" placeholder="아이디 입력" class="adm-in" style="text-align:center;letter-spacing:2px;padding:14px;font-size:15px;margin-bottom:12px;" onkeydown="if(event.key==='Enter')memLogin()">
+      <p id="memLoginError" style="color:#ff6b6b;font-size:12px;margin-bottom:12px;display:none;"></p>
+      <div style="display:flex;gap:10px;">
+        <button onclick="memLogin()" style="flex:1;background:#2ecc71;border:none;border-radius:8px;color:#fff;padding:14px;font-size:14px;font-weight:700;cursor:pointer;">로그인</button>
+        <button onclick="document.getElementById('memLoginModal').style.display='none'" style="flex:1;background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:rgba(255,255,255,0.7);padding:14px;font-size:14px;cursor:pointer;">취소</button>
       </div>
     </div>
   </div>
@@ -910,17 +1023,12 @@ function showSection(id){
   var lang=(document.body.className||'lang-ko').replace('lang-','')||'ko';
   var mainV=document.getElementById('mainVideo');
   var enrV=document.getElementById('enrollVideo');
-  var spV=document.getElementById('specialVideo');
-  var memV=document.getElementById('membershipVideo');
 
   if(id==='programs'){if(mainV&&videoLinks[lang])setTimeout(function(){mainV.src=videoLinks[lang];},100);}
   else{if(mainV)mainV.src='';}
   if(id==='enroll'){if(enrV&&enrollVideoLinks[lang])setTimeout(function(){enrV.src=enrollVideoLinks[lang];},100);}
   else{if(enrV)enrV.src='';}
-  if(id==='special'){if(spV&&specialVideoLinks[lang])setTimeout(function(){spV.src=specialVideoLinks[lang];},100);}
-  else{if(spV)spV.src='';}
-  if(id==='membership'){if(memV&&membershipVideoLinks[lang])setTimeout(function(){memV.src=membershipVideoLinks[lang];},100);}
-  else{if(memV)memV.src='';}
+  pageVideoShow(id);
 
   if(id==='msg'){
     msgHideAll();
@@ -945,11 +1053,6 @@ var enrollVideoLinks={
   zh:'https://drive.google.com/file/d/19tJVmZWKUnLZ0mS8fXcITNs_4DMrh9Yv/preview',
   ja:'https://drive.google.com/file/d/1WaXwfcgZQWz-ILR2GT7xG3nO-CQYTNio/preview'
 };
-var specialVideoLinks={
-  ko:'https://drive.google.com/file/d/1qh0XPoa8ABRZmVSPsQT0EQZMMYhxhQ2O/preview',
-  zh:'https://drive.google.com/file/d/1J8GNKeSEifqajtE24XlDqRoHQOGlxeX9/preview',
-  ja:'https://drive.google.com/file/d/1d9hVzG5-no0l1FOcE5sG320pGgyhEG3x/preview'
-};
 var membershipVideoLinks={
   ko:'https://drive.google.com/file/d/1HltbWg93ueeAtXDS3helczewGStvN_3I/preview',
   zh:'https://drive.google.com/file/d/14ZwFL71br2SD6MgJdZ8DsdUQt7jFNGC1/preview',
@@ -965,6 +1068,10 @@ function setLang(lang,btn){
   document.querySelectorAll('[data-'+lang+']:not(.lang-btn)').forEach(function(el){
     if(el.classList.contains('nav-center')||el.closest('.nav-center'))return;
     el.innerHTML=el.getAttribute('data-'+lang);
+  });
+  ['membership','youtube'].forEach(function(t){
+    var sec=document.getElementById(t);
+    if(sec&&sec.classList.contains('active')) pageVideoShow(t);
   });
 }
 
@@ -1099,7 +1206,9 @@ function msgBackToSelect(){
 
 /* ============ 영상 재생 ============ */
 function msgToEmbed(url){
-  url=url.trim();
+  url=(url||'').trim();
+  var yt=url.match(/(?:youtu\.be\/|[?&]v=|\/live\/|\/shorts\/|\/embed\/)([A-Za-z0-9_-]{11})/);
+  if(yt&&url.indexOf('youtu')!==-1) return 'https://www.youtube.com/embed/'+yt[1]+'?rel=0&playsinline=1';
   if(url.indexOf('/preview')!==-1) return url;
   var m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
   if(m) return 'https://drive.google.com/file/d/'+m[1]+'/preview';
@@ -1107,8 +1216,15 @@ function msgToEmbed(url){
 }
 
 // 메모리 캐시 (Firebase에서 불러온 데이터 저장)
-var msgVideosCache = { position: [], system: [] };
+var msgVideosCache = { position: [], system: [], membership: [], youtube: [], member_videos: [] };
 
+function msgToArray(v){
+  if(!v) return [];
+  if(Array.isArray(v)) return v.map(function(x){return x||{url:''};});
+  var a=[]; Object.keys(v).forEach(function(k){ var i=parseInt(k,10); if(!isNaN(i)) a[i]=v[k]; });
+  for(var i=0;i<a.length;i++) if(!a[i]) a[i]={url:''};
+  return a;
+}
 function msgGetVideos(type){
   return msgVideosCache[type] || [];
 }
@@ -1119,13 +1235,18 @@ function msgSaveVideos(type, arr){
 // Firebase에서 영상 데이터 불러오기
 window.msgLoadVideosFromDB = function(){
   if(!window.fbDb) return;
-  ['position','system'].forEach(function(type){
+  memLoadSettings(); memVerifySaved();
+  ['position','system','membership','youtube','member_videos'].forEach(function(type){
     var dbRef = window.fbRef(window.fbDb, 'msg_videos/' + type);
     window.fbGet(dbRef).then(function(snapshot){
       if(snapshot.exists()){
-        msgVideosCache[type] = snapshot.val() || [];
+        msgVideosCache[type] = msgToArray(snapshot.val());
       } else {
         msgVideosCache[type] = [];
+      }
+      if(type==='membership'||type==='youtube'||type==='member_videos'){
+        var sec=document.getElementById(type==='member_videos'?'membership':type);
+        if(sec&&sec.classList.contains('active')) pageVideoShow(sec.id);
       }
     }).catch(function(e){ console.log('DB 읽기 오류:', e); });
   });
@@ -1169,6 +1290,212 @@ function msgClosePlayer(){
   document.getElementById('msgPlayerOverlay').style.display='none';
 }
 
+/* ============ 회원등록제 · 유튜브 스트리밍 영상 (관리자 업로드) ============ */
+// membership: 안내영상 0=한국어 1=중국어 2=일본어 (비어있으면 한국어)
+// member_videos: 특별회원 영상 최대 20개 / youtube: 유튜브 영상 최대 20개
+var PAGE_VIDEO_DEFAULT={
+  ko:'https://drive.google.com/file/d/1HltbWg93ueeAtXDS3helczewGStvN_3I/preview',
+  zh:'https://drive.google.com/file/d/14ZwFL71br2SD6MgJdZ8DsdUQt7jFNGC1/preview',
+  ja:'https://drive.google.com/file/d/1rLSVmBIuByhvS83tNUrM0OceCjHBTEjt/preview'
+};
+var pageSel={membership:-1,youtube:0};   // membership -1 = 안내영상
+var memSettings={pcPlay:true};
+function curLang(){return (document.body.className||'lang-ko').replace('lang-','')||'ko';}
+function isMobileDevice(){
+  var ua=navigator.userAgent||'';
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
+}
+function listItems(type){
+  var v=msgGetVideos(type),r=[];
+  for(var i=0;i<v.length;i++){ if(v[i]&&v[i].url) r.push({idx:i,url:v[i].url,title:v[i].title||''}); }
+  return r;
+}
+function guideUrl(){
+  var lang=curLang(),idx={ko:0,zh:1,ja:2}[lang]||0,v=msgGetVideos('membership');
+  return (v[idx]&&v[idx].url)||(v[0]&&v[0].url)||PAGE_VIDEO_DEFAULT[lang]||PAGE_VIDEO_DEFAULT.ko;
+}
+function setFrame(id,url){
+  var f=document.getElementById(id); if(!f) return;
+  var u=url?msgToEmbed(url):'';
+  if(f.getAttribute('src')!==u){ f.src=''; if(u) setTimeout(function(){f.src=u;},100); }
+}
+var GUIDE_LABEL={ko:'안내영상',zh:'介绍视频',ja:'案内動画'};
+function renderList(boxId,items,sel,withGuide,onPick){
+  var box=document.getElementById(boxId); if(!box) return;
+  box.innerHTML='';
+  var add=function(num,title,key){
+    var b=document.createElement('button');
+    if(key===sel) b.className='on';
+    b.innerHTML='<span class="vnum">'+num+'</span><span class="vtt"></span>';
+    b.querySelector('.vtt').textContent=title;
+    b.onclick=function(){onPick(key);};
+    box.appendChild(b);
+  };
+  if(withGuide) add('▶',GUIDE_LABEL[curLang()]||'안내영상',-1);
+  items.forEach(function(it,n){ add(n+1,it.title||('영상 '+(n+1)),it.idx); });
+}
+function pageVideoShow(id){
+  // 보이지 않는 페이지 영상은 정지
+  ['membership','youtube'].forEach(function(t){ if(t!==id){ var f=document.getElementById(t+'Video'); if(f) f.src=''; } });
+  if(id==='youtube'){
+    var items=listItems('youtube'), empty=document.getElementById('youtubeEmpty');
+    if(!items.length){ setFrame('youtubeVideo',''); empty.style.display='flex'; document.getElementById('youtubeNow').textContent=''; renderList('youtubeList',[],-9,false,function(){}); return; }
+    empty.style.display='none';
+    var cur=items.filter(function(it){return it.idx===pageSel.youtube;})[0]||items[0];
+    pageSel.youtube=cur.idx;
+    setFrame('youtubeVideo',cur.url);
+    document.getElementById('youtubeNow').textContent=items.length>1?('▶ '+(cur.title||('영상 '+(items.indexOf(cur)+1)))):'';
+    renderList('youtubeList',items.length>1?items:[],cur.idx,false,function(k){pageSel.youtube=k;pageVideoShow('youtube');});
+  }
+  if(id==='membership'){
+    var logged=!!memCurrent();
+    var st=document.getElementById('memState');
+    if(st) st.innerHTML=logged?('✓ '+memCurrent()+' <a href="javascript:void(0)" onclick="memLogout()" style="color:#8B6914;margin-left:6px;">로그아웃</a>'):'';
+    document.getElementById('memLockMsg').style.display=logged?'none':'block';
+    var items2=logged?listItems('member_videos'):[];
+    if(!logged) pageSel.membership=-1;
+    var cur2=items2.filter(function(it){return it.idx===pageSel.membership;})[0];
+    if(!cur2) pageSel.membership=-1;
+    var block=document.getElementById('membershipBlock');
+    if(pageSel.membership===-1){
+      block.style.display='none';
+      setFrame('membershipVideo',guideUrl());
+      document.getElementById('membershipNow').textContent=logged?('▶ '+(GUIDE_LABEL[curLang()]||'안내영상')):'';
+    } else if(!memSettings.pcPlay && !isMobileDevice()){
+      setFrame('membershipVideo','');
+      block.innerHTML='<div style="font-size:30px;">📱</div><div>컴퓨터에서는 재생할 수 없습니다</div><div style="font-size:13px;opacity:0.7;">휴대폰으로 시청해주세요</div>';
+      block.style.display='flex';
+      document.getElementById('membershipNow').textContent='▶ '+(cur2.title||'');
+    } else {
+      block.style.display='none';
+      setFrame('membershipVideo',cur2.url);
+      document.getElementById('membershipNow').textContent='▶ '+(cur2.title||('영상 '+(items2.indexOf(cur2)+1)));
+    }
+    renderList('membershipList',items2,pageSel.membership,logged,function(k){pageSel.membership=k;pageVideoShow('membership');});
+  }
+}
+
+/* ============ 특별회원 로그인 ============ */
+function memCleanId(v){ return (v||'').trim().toUpperCase().replace(/[.#$\[\]\/\s]/g,''); }
+function memCurrent(){ try{return localStorage.getItem('mbbcMemberId')||'';}catch(e){return '';} }
+function memOpenLogin(){
+  if(memCurrent()){ pageVideoShow('membership'); return; }
+  var m=document.getElementById('memLoginModal'); m.style.display='flex';
+  document.getElementById('memLoginError').style.display='none';
+  var inp=document.getElementById('memIdInput'); inp.value=''; setTimeout(function(){inp.focus();},100);
+}
+function memLogin(){
+  var id=memCleanId(document.getElementById('memIdInput').value);
+  var err=document.getElementById('memLoginError');
+  if(!id){ err.textContent='아이디를 입력해주세요'; err.style.display='block'; return; }
+  if(!window.fbDb){ err.textContent='잠시 후 다시 시도해주세요'; err.style.display='block'; return; }
+  window.fbGet(window.fbRef(window.fbDb,'msg_videos/members/'+id)).then(function(snap){
+    if(snap.exists()){
+      try{localStorage.setItem('mbbcMemberId',id);}catch(e){}
+      document.getElementById('memLoginModal').style.display='none';
+      pageSel.membership=-1;
+      pageVideoShow('membership');
+    } else { err.textContent='등록되지 않은 아이디입니다'; err.style.display='block'; }
+  }).catch(function(){ err.textContent='확인 중 오류가 발생했습니다'; err.style.display='block'; });
+}
+function memLogout(){
+  try{localStorage.removeItem('mbbcMemberId');}catch(e){}
+  pageSel.membership=-1; pageVideoShow('membership');
+}
+// 삭제된 아이디는 자동 로그아웃
+function memVerifySaved(){
+  var id=memCurrent(); if(!id||!window.fbDb) return;
+  window.fbGet(window.fbRef(window.fbDb,'msg_videos/members/'+id)).then(function(snap){
+    if(!snap.exists()){ try{localStorage.removeItem('mbbcMemberId');}catch(e){}
+      var sec=document.getElementById('membership'); if(sec&&sec.classList.contains('active')) pageVideoShow('membership'); }
+  }).catch(function(){});
+}
+function memLoadSettings(){
+  if(!window.fbDb) return;
+  window.fbGet(window.fbRef(window.fbDb,'msg_videos/member_settings')).then(function(snap){
+    var v=snap.exists()?snap.val():{};
+    memSettings.pcPlay=(v&&v.pcPlay===false)?false:true;
+    var sec=document.getElementById('membership'); if(sec&&sec.classList.contains('active')) pageVideoShow('membership');
+  }).catch(function(){});
+}
+
+/* ============ 회원 등록제 관리자 (ID 생성) ============ */
+function memAdminLogin(){
+  var id=document.getElementById('memAdminIdInput').value.trim();
+  if(id===MSG_ADMIN_ID){
+    document.getElementById('msgAdminLoginModal').style.display='none';
+    document.getElementById('memAdminIdInput').value='';
+    document.getElementById('memAdminPanel').style.display='block';
+    memAdminRefresh();
+  } else { document.getElementById('memAdminLoginError').style.display='block'; }
+}
+function memAdminLogout(){ document.getElementById('memAdminPanel').style.display='none'; }
+function memAdminRefresh(){
+  memPcRender();
+  if(!window.fbDb) return;
+  window.fbGet(window.fbRef(window.fbDb,'msg_videos/member_settings')).then(function(snap){
+    var v=snap.exists()?snap.val():{}; memSettings.pcPlay=(v&&v.pcPlay===false)?false:true; memPcRender();
+  }).catch(function(){});
+  window.fbGet(window.fbRef(window.fbDb,'msg_videos/members')).then(function(snap){
+    var obj=snap.exists()?(snap.val()||{}):{};
+    var ids=Object.keys(obj).sort(function(a,b){return ((obj[b]&&obj[b].created)||0)-((obj[a]&&obj[a].created)||0);});
+    document.getElementById('memCount').textContent=ids.length;
+    var box=document.getElementById('memIdList'); box.innerHTML='';
+    if(!ids.length){ box.innerHTML='<p style="text-align:center;color:rgba(255,255,255,0.45);font-size:15px;padding:6px 0;">등록된 회원이 없습니다</p>'; return; }
+    ids.forEach(function(id){
+      var d=obj[id]&&obj[id].created?new Date(obj[id].created):null;
+      var row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:center;gap:8px;background:#141b2d;border-radius:8px;padding:10px 12px;margin-bottom:8px;';
+      row.innerHTML='<span style="flex:1;color:#fff;font-size:15px;font-weight:700;letter-spacing:1px;"></span>'+
+        '<span style="color:rgba(255,255,255,0.4);font-size:11px;">'+(d?(d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)):'')+'</span>'+
+        '<button style="background:#3b82f6;border:none;color:#fff;border-radius:6px;padding:6px 10px;font-size:12px;cursor:pointer;">복사</button>'+
+        '<button style="background:#e74c3c;border:none;color:#fff;border-radius:6px;padding:6px 10px;font-size:12px;cursor:pointer;">삭제</button>';
+      row.children[0].textContent=id;
+      row.children[2].onclick=function(){ memCopy(id,this); };
+      row.children[3].onclick=function(){
+        msgShowConfirm(id+' 아이디를 삭제하시겠습니까?',function(){
+          window.fbRemove(window.fbRef(window.fbDb,'msg_videos/members/'+id)).then(memAdminRefresh).catch(function(){alert('삭제 오류');});
+        });
+      };
+      box.appendChild(row);
+    });
+  }).catch(function(e){ console.log(e); });
+}
+function memCopy(id,btn){
+  var done=function(){ var t=btn.textContent; btn.textContent='복사됨'; setTimeout(function(){btn.textContent=t;},1200); };
+  try{ navigator.clipboard.writeText(id).then(done,function(){prompt('아이디를 복사하세요',id);}); }catch(e){ prompt('아이디를 복사하세요',id); }
+}
+function memRandomId(){
+  var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',r='MB';
+  for(var i=0;i<6;i++) r+=c.charAt(Math.floor(Math.random()*c.length));
+  return r;
+}
+function memCreateId(){
+  if(!window.fbDb){ alert('잠시 후 다시 시도해주세요'); return; }
+  var inp=document.getElementById('memNewIdInput');
+  var id=memCleanId(inp.value)||memRandomId();
+  var r=window.fbRef(window.fbDb,'msg_videos/members/'+id);
+  window.fbGet(r).then(function(snap){
+    if(snap.exists()){ alert(id+' 는 이미 있는 아이디입니다'); return; }
+    return window.fbSet(r,{created:Date.now()}).then(function(){
+      inp.value=''; alert('새 아이디가 생성되었습니다: '+id); memAdminRefresh();
+    });
+  }).catch(function(){ alert('생성 중 오류가 발생했습니다'); });
+}
+function memPcRender(){
+  var on=memSettings.pcPlay;
+  document.getElementById('memPcToggle').checked=on;
+  document.getElementById('memPcTrack').style.background=on?'#10b981':'#4b5563';
+  document.getElementById('memPcKnob').style.left=on?'33px':'3px';
+  var st=document.getElementById('memPcStatus');
+  st.textContent=on?'✓ 현재 컴퓨터에서 동영상 재생이 가능합니다':'✕ 현재 컴퓨터에서 동영상 재생이 차단되어 있습니다 (휴대폰만 가능)';
+  st.style.cssText='border-radius:6px;padding:10px 12px;font-size:13px;'+(on?'background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.35);color:#34d399;':'background:rgba(231,76,60,0.12);border:1px solid rgba(231,76,60,0.35);color:#ff8a80;');
+}
+function memSetPc(on){
+  memSettings.pcPlay=on; memPcRender();
+  if(window.fbDb) window.fbSet(window.fbRef(window.fbDb,'msg_videos/member_settings'),{pcPlay:on}).catch(function(){alert('저장 오류');});
+}
+
 /* ============ 관리자 ============ */
 var MSG_ADMIN_ID='MBBC-1203';
 
@@ -1177,6 +1504,8 @@ function msgShowAdminLogin(){
   if(!modal) return;
   modal.style.display='flex';
   document.getElementById('adminLoginError').style.display='none';
+  var me=document.getElementById('memAdminLoginError'); if(me) me.style.display='none';
+  var mi=document.getElementById('memAdminIdInput'); if(mi) mi.value='';
   var inp=document.getElementById('adminIdInput');
   if(inp){inp.value='';setTimeout(function(){inp.focus();},100);}
 }
@@ -1192,7 +1521,21 @@ function msgAdminLogin(){
   }
 }
 
+function msgAdminHidePanels(){
+  ['youtube','membership'].forEach(function(t){
+    var el=document.getElementById('msgAdmin_'+t+'_Panel'); if(el) el.style.display='none';
+  });
+}
+function msgAdminShowPanel(type){
+  document.getElementById('msgAdminMain').style.display='none';
+  msgAdminHidePanels();
+  document.getElementById('msgAdmin_'+type+'_Panel').style.display='block';
+  msgRenderUploadSlots(type);
+  if(type==='membership') msgRenderUploadSlots('member_videos');
+}
+
 function msgAdminShowMain(){
+  msgAdminHidePanels();
   document.getElementById('msgAdminMain').style.display='flex';
   document.getElementById('msgAdminPositionPanel').style.display='none';
   document.getElementById('msgAdminSystemPanel').style.display='none';
@@ -1211,19 +1554,24 @@ function msgAdminShowSystem(){
 }
 
 function msgRenderUploadSlots(type){
-  var cid=type==='position'?'positionUploadSlots':'systemUploadSlots';
+  var cid=type+'UploadSlots';
+  var isLang=(type==='membership');
+  var isList=(type==='youtube'||type==='member_videos');
+  var labels=isLang?['한국어 안내영상','중국어 안내영상','일본어 안내영상']:null;
+  var count=isLang?3:(isList?20:5);
   var container=document.getElementById(cid);
   if(!container) return;
   var videos=msgGetVideos(type);
   container.innerHTML='';
-  for(var i=0;i<5;i++){
+  for(var i=0;i<count;i++){
     var url=videos[i]?videos[i].url:'';
     var slot=document.createElement('div');
     slot.style.cssText='background:#2a3555;border-radius:12px;padding:18px;margin-bottom:16px;';
     var num=i;
     slot.innerHTML=
-      '<p style="color:#fff;font-size:15px;font-weight:700;margin-bottom:12px;">'+(i+1)+'회차</p>'+
-      '<input type="text" id="'+type+'_slot_'+i+'" value="" placeholder="Google Drive 공유 링크 입력" '+
+      '<p style="color:#fff;font-size:15px;font-weight:700;margin-bottom:12px;">'+(labels?labels[i]:(isList?(i+1)+'번 영상':(i+1)+'회차'))+'</p>'+
+      (isList?'<input type="text" id="'+type+'_title_'+i+'" placeholder="영상 제목 (예: 1강 기초)" class="adm-in" style="margin-bottom:8px;">':'')+
+      '<input type="text" id="'+type+'_slot_'+i+'" value="" placeholder="'+((isLang||isList)?'유튜브 또는 Google Drive 링크 입력':'Google Drive 공유 링크 입력')+'" '+
       'style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;padding:12px 14px;font-size:13px;outline:none;margin-bottom:12px;box-sizing:border-box;">'+
       '<div style="display:flex;gap:10px;">'+
         '<button id="save_'+type+'_'+i+'" style="flex:1;background:#2ecc71;border:none;border-radius:8px;color:#fff;padding:12px;font-size:14px;font-weight:700;cursor:pointer;">저장</button>'+
@@ -1233,12 +1581,20 @@ function msgRenderUploadSlots(type){
     // input 값 설정
     var inp=document.getElementById(type+'_slot_'+i);
     if(inp && url) inp.value=url;
+    var tin=document.getElementById(type+'_title_'+i);
+    if(tin && videos[i] && videos[i].title) tin.value=videos[i].title;
     // 버튼 이벤트 (클로저)
     (function(t,n){
       document.getElementById('save_'+t+'_'+n).addEventListener('click',function(){msgAdminSaveSlot(t,n);});
       document.getElementById('del_'+t+'_'+n).addEventListener('click',function(){msgAdminDeleteSlot(t,n);});
     })(type,i);
   }
+}
+
+function msgSlotName(type,idx){
+  if(type==='membership') return ['한국어 안내','중국어 안내','일본어 안내'][idx];
+  if(type==='youtube'||type==='member_videos') return (idx+1)+'번';
+  return (idx+1)+'회차';
 }
 
 function msgShowConfirm(text,onOk){
@@ -1252,23 +1608,28 @@ function msgAdminSaveSlot(type,idx){
   var inp=document.getElementById(type+'_slot_'+idx);
   var url=inp?inp.value.trim():'';
   if(!url){alert('링크를 입력해주세요');return;}
-  msgShowConfirm((idx+1)+'회차 영상을 저장하시겠습니까?',function(){
+  var nm=msgSlotName(type,idx);
+  msgShowConfirm(nm+' 영상을 저장하시겠습니까?',function(){
     var videos=msgGetVideos(type);
     while(videos.length<=idx) videos.push({url:''});
-    videos[idx]={url:url};
+    var tin=document.getElementById(type+'_title_'+idx);
+    videos[idx]=tin?{url:url,title:tin.value.trim()}:{url:url};
     msgSaveVideosToDB(type,videos);
-    alert((idx+1)+'회차 영상이 저장되었습니다!');
+    alert(nm+' 영상이 저장되었습니다!');
   });
 }
 
 function msgAdminDeleteSlot(type,idx){
-  msgShowConfirm((idx+1)+'회차 영상을 삭제하시겠습니까?',function(){
+  var nm=msgSlotName(type,idx);
+  msgShowConfirm(nm+' 영상을 삭제하시겠습니까?',function(){
     var videos=msgGetVideos(type);
     if(videos[idx]) videos[idx]={url:''};
     msgSaveVideosToDB(type,videos);
     var inp=document.getElementById(type+'_slot_'+idx);
     if(inp) inp.value='';
-    alert((idx+1)+'회차 영상이 삭제되었습니다!');
+    var tin=document.getElementById(type+'_title_'+idx);
+    if(tin) tin.value='';
+    alert(nm+' 영상이 삭제되었습니다!');
   });
 }
 
@@ -1277,6 +1638,7 @@ function msgAdminLogout(){
   document.getElementById('msgAdminMain').style.display='none';
   document.getElementById('msgAdminPositionPanel').style.display='none';
   document.getElementById('msgAdminSystemPanel').style.display='none';
+  msgAdminHidePanels();
 }
 </script>
 </body>
