@@ -1453,55 +1453,146 @@ function memRenderGrid(){
   }
 }
 /* ===== 모래성이 무너지며 화면 등장 ===== */
+/* ===== 큰북 소리 (파일 없이 브라우저에서 직접 만듦) ===== */
+var memAudioCtx=null;
+function memAudioUnlock(){
+  try{
+    if(!memAudioCtx){ var AC=window.AudioContext||window.webkitAudioContext; if(AC) memAudioCtx=new AC(); }
+    if(memAudioCtx&&memAudioCtx.state==='suspended') memAudioCtx.resume();
+  }catch(e){}
+}
+function memDrum(){
+  memAudioUnlock();
+  var ac=memAudioCtx; if(!ac) return;
+  try{
+    var now=ac.currentTime+0.02;
+    var master=ac.createGain(); master.gain.value=1.25;
+    var lim=ac.createDynamicsCompressor();
+    lim.threshold.value=-6; lim.knee.value=6; lim.ratio.value=12; lim.attack.value=0.002; lim.release.value=0.4;
+    var out=ac.createGain(); out.gain.value=1.0; lim.connect(out); out.connect(ac.destination);
+    // 울림(잔향)
+    var len=Math.floor(ac.sampleRate*8.5), ir=ac.createBuffer(2,len,ac.sampleRate);
+    for(var ch=0;ch<2;ch++){ var dd=ir.getChannelData(ch); for(var i=0;i<len;i++) dd[i]=(Math.random()*2-1)*Math.pow(1-i/len,1.9); }
+    var verb=ac.createConvolver(); verb.buffer=ir;
+    var wet=ac.createGain(); wet.gain.value=0.75;
+    var dry=ac.createGain(); dry.gain.value=0.85;
+    master.connect(dry); dry.connect(lim);
+    master.connect(verb); verb.connect(wet); wet.connect(lim);
+    // 북통 울림: 낮은음이 아래로 떨어짐
+    [[62,1.0,5.6],[93,0.45,3.0],[41,0.8,7.0]].forEach(function(t){
+      var o=ac.createOscillator(), g=ac.createGain();
+      o.type='sine';
+      o.frequency.setValueAtTime(t[0]*1.9,now);
+      o.frequency.exponentialRampToValueAtTime(t[0],now+0.09);
+      o.frequency.exponentialRampToValueAtTime(t[0]*0.82,now+t[2]);
+      g.gain.setValueAtTime(0.0001,now);
+      g.gain.exponentialRampToValueAtTime(t[1],now+0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001,now+t[2]);
+      o.connect(g); g.connect(master); o.start(now); o.stop(now+t[2]+0.1);
+    });
+    // 북채 타격음
+    var nb=ac.createBuffer(1,Math.floor(ac.sampleRate*0.25),ac.sampleRate), nd=nb.getChannelData(0);
+    for(var k=0;k<nd.length;k++) nd[k]=(Math.random()*2-1)*Math.pow(1-k/nd.length,4);
+    var ns=ac.createBufferSource(); ns.buffer=nb;
+    var lp=ac.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=900;
+    var ng=ac.createGain(); ng.gain.value=0.6;
+    ns.connect(lp); lp.connect(ng); ng.connect(master); ns.start(now);
+  }catch(e){ console.log('drum',e); }
+}
+
+/* ===== 로그인 효과: 북소리 → "MBBC의 세계로" → 천천히 모래로 무너짐 → 화면이 모래가 쌓이듯 천천히 선명해짐 ===== */
 function memSandReveal(){
-  var old=document.getElementById('memSand'); if(old) old.remove();
+  ['memSand','memSandFx'].forEach(function(k){ var o=document.getElementById(k); if(o) o.remove(); });
   var W=window.innerWidth, H=window.innerHeight;
-  var cv=document.createElement('canvas'); cv.id='memSand'; cv.width=W; cv.height=H;
-  cv.style.cssText='position:fixed;inset:0;width:100%;height:100%;z-index:4500;pointer-events:none;';
+  // ① 검은 막 (저해상도 → 모래알 크기의 네모로 확대)
+  var CELL=Math.max(4,Math.round(Math.min(W,H)/180));
+  var CW=Math.ceil(W/CELL), CH=Math.ceil(H/CELL);
+  var veil=document.createElement('canvas'); veil.id='memSand'; veil.width=CW; veil.height=CH;
+  veil.style.cssText='position:fixed;inset:0;width:'+(CW*CELL)+'px;height:'+(CH*CELL)+'px;z-index:4500;pointer-events:none;image-rendering:pixelated;image-rendering:crisp-edges;';
+  document.body.appendChild(veil);
+  var vctx=veil.getContext('2d'), vimg=vctx.createImageData(CW,CH), vd=vimg.data;
+  for(var i=0;i<vd.length;i+=4){ vd[i+3]=255; }
+  vctx.putImageData(vimg,0,0);
+  // ② 글자 모래알 캔버스
+  var cv=document.createElement('canvas'); cv.id='memSandFx'; cv.width=W; cv.height=H;
+  cv.style.cssText='position:fixed;inset:0;width:100%;height:100%;z-index:4501;pointer-events:none;';
   document.body.appendChild(cv);
   var ctx=cv.getContext('2d');
-  // 글자 그리기 (오프스크린)
+  memDrum();   // 큰북 한 번
+  // 글자 준비
   var off=document.createElement('canvas'); off.width=W; off.height=H;
   var o=off.getContext('2d');
-  var txt='MBBC의 세계로';
+  var txt='MBBC의 세계로', FONT='"Noto Serif KR","Nanum Myeongjo","Batang",serif';
   var fs=Math.min(W*0.11,H*0.2);
-  o.font='700 '+Math.round(fs)+'px "Noto Serif KR","Nanum Myeongjo","Batang",serif';
-  while(o.measureText(txt).width>W*0.86 && fs>20){ fs*=0.92; o.font='700 '+Math.round(fs)+'px "Noto Serif KR","Nanum Myeongjo","Batang",serif'; }
+  o.font='700 '+Math.round(fs)+'px '+FONT;
+  while(o.measureText(txt).width>W*0.86 && fs>20){ fs*=0.92; o.font='700 '+Math.round(fs)+'px '+FONT; }
   o.textAlign='center'; o.textBaseline='middle';
   var gr=o.createLinearGradient(0,H/2-fs/2,0,H/2+fs/2);
   gr.addColorStop(0,'#fff2c4'); gr.addColorStop(0.45,'#e2b551'); gr.addColorStop(0.55,'#c8922e'); gr.addColorStop(1,'#f3d27a');
   o.fillStyle=gr; o.fillText(txt,W/2,H/2);
-  var id=o.getImageData(0,0,W,H), d=id.data;
-  // 글자 픽셀만 모래알로
+  var d=o.getImageData(0,0,W,H).data;
   var S=Math.max(2,Math.round(Math.min(W,H)/320)), grains=[];
   for(var y=0;y<H;y+=S){ for(var x=0;x<W;x+=S){
     var q=((y*W)+x)*4;
     if(d[q+3]>110){
       var n=(Math.random()-0.5)*50;
-      grains.push({x:x,y:y,r:Math.min(255,d[q]+n)|0,g:Math.min(255,d[q+1]+n)|0,b:Math.min(255,d[q+2]+n*0.7)|0,
-        vx:(Math.random()-0.5)*0.6, vy:0,
-        t:2.0+(x/W)*1.6+(1-(y-(H/2-fs/2))/fs)*0.5+Math.random()*0.9});
+      grains.push({x:x,y:y,c:'rgb('+(Math.min(255,d[q]+n)|0)+','+(Math.min(255,d[q+1]+n)|0)+','+(Math.min(255,d[q+2]+n*0.7)|0)+')',
+        vx:(Math.random()-0.5)*0.4, vy:0,
+        t:2.9+(x/W)*2.2+(1-(y-(H/2-fs/2))/fs)*0.7+Math.random()*1.2});
     }
   }}
-  grains.forEach(function(p){ p.c='rgb('+p.r+','+p.g+','+p.b+')'; });
-  var start=null, g=0.045*S;
+  // 화면이 드러나는 시간: 위쪽이 조금 먼저, 모래알처럼 무작위로 하나씩
+  var R0=5.6, RSPAN=5.2, FADE=0.9;
+  var cellT=new Float32Array(CW*CH);
+  for(var cy=0;cy<CH;cy++) for(var cx=0;cx<CW;cx++)
+    cellT[cy*CW+cx]=R0+(cy/CH)*RSPAN*0.45+Math.random()*RSPAN*0.55;
+  var R1=R0+RSPAN+FADE;
+  // 화면 흐림 → 선명
+  var scr=document.getElementById('memScreen');
+  var BL=10; if(scr) scr.style.filter='blur('+BL+'px)';
+  var T0=0.35, start=null, g=0.022*S;
   function frame(ts){
     if(!start) start=ts;
     var el=(ts-start)/1000, alive=0;
-    // 검은 바탕: 3.2초부터 서서히 사라짐
-    var bgA=el<3.2?1:Math.max(0,1-(el-3.2)/2.2);
-    ctx.clearRect(0,0,W,H);
-    if(bgA>0){ ctx.fillStyle='rgba(0,0,0,'+bgA+')'; ctx.fillRect(0,0,W,H); }
-    var txA=Math.min(1,el/1.0);   // 글자 서서히 나타남
-    ctx.globalAlpha=txA;
-    if(el<2.0){ ctx.shadowColor='rgba(255,200,80,'+(0.5+0.3*Math.sin(el*4))+')'; ctx.shadowBlur=fs*0.15; ctx.drawImage(off,0,0); ctx.shadowBlur=0; }
-    for(var i=0;i<grains.length;i++){
-      var p=grains[i];
-      if(el>p.t){ p.vy+=g; p.x+=p.vx; p.y+=p.vy; p.vx*=0.99; }
-      if(p.y<H+S){ alive++; if(el>=2.0){ ctx.fillStyle=p.c; ctx.fillRect(p.x,p.y,S,S); } }
+    // 검은 막: 모래알이 금빛으로 반짝였다가 투명해짐
+    if(el>=R0-0.1 && el<=R1+0.1){
+      for(var k=0,p4=0;k<cellT.length;k++,p4+=4){
+        var f=(el-cellT[k])/FADE;
+        if(f<=0){ vd[p4]=0; vd[p4+1]=0; vd[p4+2]=0; vd[p4+3]=255; }
+        else if(f>=1){ vd[p4+3]=0; }
+        else {
+          var gold=f<0.35?f/0.35:1-(f-0.35)/0.65;
+          vd[p4]=(215*gold)|0; vd[p4+1]=(165*gold)|0; vd[p4+2]=(80*gold)|0;
+          vd[p4+3]=(255*(1-f*f))|0;
+        }
+      }
+      vctx.putImageData(vimg,0,0);
     }
-    ctx.globalAlpha=1;
-    if((alive>0||bgA>0) && el<12) requestAnimationFrame(frame); else cv.remove();
+    if(scr){
+      var bp=el<R0?0:Math.min(1,(el-R0)/(R1-R0+0.6));
+      var b=BL*(1-bp);
+      scr.style.filter=b>0.05?('blur('+b.toFixed(2)+'px)'):'';
+    }
+    // 글자
+    ctx.clearRect(0,0,W,H);
+    if(el>=T0){
+      ctx.globalAlpha=Math.min(1,(el-T0)/0.5);
+      if(el<2.9){
+        var flash=Math.max(0,1-(el-T0)/0.6);
+        ctx.shadowColor='rgba(255,210,100,'+(0.5+0.3*Math.sin(el*4)+flash*0.5)+')';
+        ctx.shadowBlur=fs*(0.15+flash*0.35);
+        ctx.drawImage(off,0,0); ctx.shadowBlur=0; alive=1;
+      } else {
+        for(var i=0;i<grains.length;i++){
+          var gp=grains[i];
+          if(el>gp.t){ gp.vy+=g; gp.x+=gp.vx; gp.y+=gp.vy; gp.vx*=0.99; }
+          if(gp.y<H+S){ alive++; ctx.fillStyle=gp.c; ctx.fillRect(gp.x,gp.y,S,S); }
+        }
+      }
+      ctx.globalAlpha=1;
+    } else alive=1;
+    if((alive>0||el<R1+0.7) && el<18) requestAnimationFrame(frame);
+    else { veil.remove(); cv.remove(); if(scr) scr.style.filter=''; }
   }
   requestAnimationFrame(frame);
 }
@@ -1558,6 +1649,7 @@ function memOpenLogin(){
   var inp=document.getElementById('memIdInput'); inp.value=''; setTimeout(function(){inp.focus();},100);
 }
 function memLogin(){
+  memAudioUnlock();
   var id=memCleanId(document.getElementById('memIdInput').value);
   var err=document.getElementById('memLoginError');
   if(!id){ err.textContent='아이디를 입력해주세요'; err.style.display='block'; return; }
